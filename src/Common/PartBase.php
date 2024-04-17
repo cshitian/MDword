@@ -523,7 +523,7 @@ class PartBase
         $string = $this->filterUtf8($this->filterSpecailCodeForWord($string));
 
         $string = $this->controlCharacterPHP2OOXML($string);
-        $string = preg_replace('/['.chr(240).'-'.chr(247).']/', '{%{}%}'."$0", $string);
+        $string = preg_replace('/(?<=!\{\%\{\}\%\})['.chr(240).'-'.chr(247).']/', '{%{}%}'."$0", $string);
 
         return htmlspecialchars($string,ENT_COMPAT, 'UTF-8');
     }
