@@ -285,7 +285,15 @@ class Word
         //4字节支持字体转化
         preg_match_all('/\<w:rFonts[\s\S]*?\/\>/i',$xml,$matches);
         $font = empty($matches[0])?'<w:rPr><w:rFonts w:ascii="宋体" w:hAnsi="宋体" w:eastAsia="宋体" w:cs="宋体"/></w:rPr>':'<w:rPr>'.end($matches[0]).'</w:rPr>';
-        return preg_replace('/\{%\{\}%\}([\s\S]{4})/', '<w:rPr><w:rFonts w:ascii="SimSun-ExtB" w:eastAsia="SimSun-ExtB" w:hAnsi="SimSun-ExtB" w:cs="SimSun-ExtB" w:hint="eastAsia"/></w:rPr>$1'.$font, $xml);
+
+
+        return preg_replace([
+            '/\{%\{0\}%\}([\s\S]{0,1})/u',
+            '/\{%\{1\}%\}([\s\S]{0,1})/u',
+        ], [
+                '<w:rPr><w:rFonts w:ascii="SimSun-ExtB" w:eastAsia="SimSun-ExtB" w:hAnsi="SimSun-ExtB" w:cs="SimSun-ExtB" w:hint="eastAsia"/></w:rPr>$1'.$font,
+                '<w:rPr><w:rFonts w:ascii="Cambria Math" w:eastAsia="Cambria Math" w:hAnsi="Cambria Math" w:cs="Cambria Math" w:hint="eastAsia"/></w:rPr>$1'.$font,
+            ], $xml);
     }
     
     private function deleteComments($remainComments = true) {
